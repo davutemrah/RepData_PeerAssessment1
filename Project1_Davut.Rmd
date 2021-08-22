@@ -79,18 +79,16 @@ print(paste("Median of Daily Step is", round(median_step)))
 ```{r}
 df2 <-
 df %>%
-    mutate(time = seq.POSIXt(as.POSIXct("2012-10-01 00:00:00"),
-                      by = "5 min", along.with = date)) %>%
-    group_by(date) %>%
+    group_by(interval) %>%
     mutate(avg_steps = mean(steps, na.rm = T)) %>%
     ungroup()
 
-qplot(data = df2, x = time, y= avg_steps,
+qplot(data = df2, x = interval, y= avg_steps,
       geom = "line",
-      main = "Line Graph of Average Daily Steps",
-      ylab = "Average Daily Steps",
-      xlab = "Days with 5 min Interval") +
-    scale_x_datetime(breaks = "week", date_labels = "%Y %b %d") +
+      main = "Line Graph of Average  Steps",
+      ylab = "Average  Steps",
+      xlab = "5 min Intervals") +
+
     theme(axis.text.x = element_text(angle = 90))
     
 ```
@@ -175,11 +173,35 @@ Current statistics are smaller than the statistics of the previous version of th
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-For this part the `weekdays()` function may be of some help here. Use the dataset with the filled-in missing values for this part.
+    * For this part the `weekdays()` function may be of some help here. Use the dataset with the filled-in missing values for this part.
+    * Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+    * Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
-Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+As we see below, there is a spike in the morning time during the weekdays, on average there are more steps in the weekend.
 
+```{r}
+df3 <- 
+df3 %>%
+    mutate(daytype = as.factor(if_else(weekdays(date) %in% c("Saturday", "Sunday"),
+                      "Weekend", "Weekday"))) %>%
+    mutate(time = seq.POSIXt(as.POSIXct("2012-10-01 00:00:00"),
+                      by = "5 min", along.with = date)) %>%
+    group_by(daytype) %>%
+    mutate(avg_steps = mean(steps, na.rm = T)) %>%
+    ungroup() %>%
+    group_by(daytype, interval) %>%
+    mutate(avg_steps2 = mean(steps, na.rm = T)) %>%
+    ungroup()
+
+qplot(data = df3, x = interval, y= avg_steps2,
+      geom = "line",
+      main = "Line Graph of Average Daily Steps",
+      ylab = "Average Daily Steps",
+      xlab = "Days with 5 min Interval") +
+    scale_x_continuous(breaks = seq(0, 3000, 250)) +
+    theme(axis.text.x = element_text(angle = 90)) +
+    facet_grid(. ~ daytype)
+```
 
 
 

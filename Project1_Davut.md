@@ -283,6 +283,33 @@ Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minut
 
 
 
+```r
+df3 <- 
+df3 %>%
+    mutate(daytype = as.factor(if_else(weekdays(date) %in% c("Saturday", "Sunday"),
+                      "Weekend", "Weekday"))) %>%
+    mutate(time = seq.POSIXt(as.POSIXct("2012-10-01 00:00:00"),
+                      by = "5 min", along.with = date)) %>%
+    group_by(daytype) %>%
+    mutate(avg_steps = mean(steps, na.rm = T)) %>%
+    ungroup() %>%
+    group_by(daytype, interval) %>%
+    mutate(avg_steps2 = mean(steps, na.rm = T)) %>%
+    ungroup()
+
+qplot(data = df3, x = interval, y= avg_steps2,
+      geom = "line",
+      main = "Line Graph of Average Daily Steps",
+      ylab = "Average Daily Steps",
+      xlab = "Days with 5 min Interval") +
+    scale_x_continuous(breaks = seq(0, 3000, 250)) +
+    theme(axis.text.x = element_text(angle = 90)) +
+    facet_grid(. ~ daytype)
+```
+
+![](Project1_Davut_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+
 
 
 
