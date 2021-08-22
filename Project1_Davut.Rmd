@@ -53,7 +53,7 @@ head(df_steps, n = 5)
     * Histograms to represent frequency of numerical data 
     * Bargraph to represent frequency of categorical data 
     
-```{r, warning=FALSE}
+```{r hist1, warning=FALSE}
 library(ggplot2)
 qplot(data = df_steps, x = total_steps,
       geom = "histogram", bins = 50,
@@ -76,7 +76,7 @@ print(paste("Median of Daily Step is", round(median_step)))
 
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r}
+```{r line1}
 df2 <-
 df %>%
     group_by(interval) %>%
@@ -144,7 +144,7 @@ head(df3, n=5)
 ```
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r}
+```{r hist2}
 df3_steps <-
     df3 %>%
     group_by(date) %>%
@@ -179,7 +179,7 @@ Current statistics are smaller than the statistics of the previous version of th
 
 As we see below, there is a spike in the morning time during the weekdays, on average there are more steps in the weekend.
 
-```{r}
+```{r line2}
 df3 <- 
 df3 %>%
     mutate(daytype = as.factor(if_else(weekdays(date) %in% c("Saturday", "Sunday"),

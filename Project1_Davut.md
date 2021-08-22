@@ -84,7 +84,7 @@ qplot(data = df_steps, x = total_steps,
     scale_x_continuous(breaks = round(seq(0, 22000, by = 2000)))
 ```
 
-![](Project1_Davut_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](Project1_Davut_files/figure-html/hist1-1.png)<!-- -->
 3. Calculate and report the mean and median of the total number of steps taken per day
 
 ```r
@@ -115,26 +115,20 @@ print(paste("Median of Daily Step is", round(median_step)))
 ```r
 df2 <-
 df %>%
-    mutate(time = seq.POSIXt(as.POSIXct("2012-10-01 00:00:00"),
-                      by = "5 min", along.with = date)) %>%
-    group_by(date) %>%
+    group_by(interval) %>%
     mutate(avg_steps = mean(steps, na.rm = T)) %>%
     ungroup()
 
-qplot(data = df2, x = time, y= avg_steps,
+qplot(data = df2, x = interval, y= avg_steps,
       geom = "line",
-      main = "Line Graph of Average Daily Steps",
-      ylab = "Average Daily Steps",
-      xlab = "Days with 5 min Interval") +
-    scale_x_datetime(breaks = "week", date_labels = "%Y %b %d") +
+      main = "Line Graph of Average  Steps",
+      ylab = "Average  Steps",
+      xlab = "5 min Intervals") +
+
     theme(axis.text.x = element_text(angle = 90))
 ```
 
-```
-## Warning: Removed 576 row(s) containing missing values (geom_path).
-```
-
-![](Project1_Davut_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](Project1_Davut_files/figure-html/line1-1.png)<!-- -->
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -179,8 +173,8 @@ sapply(df2, function(x){sum(is.na(x))})
 ```
 
 ```
-##     steps      date  interval      time avg_steps 
-##      2304         0         0         0      2304
+##     steps      date  interval avg_steps 
+##      2304         0         0         0
 ```
 
 ```r
@@ -249,7 +243,7 @@ qplot(data = df3_steps, x = total_steps,
     scale_x_continuous(breaks = round(seq(0, 22000, by = 2000)))
 ```
 
-![](Project1_Davut_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](Project1_Davut_files/figure-html/hist2-1.png)<!-- -->
 
 ```r
 mean_steps2 <- round(mean(df3_steps$total_steps), digits = 1)
@@ -276,11 +270,11 @@ Current statistics are smaller than the statistics of the previous version of th
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-For this part the `weekdays()` function may be of some help here. Use the dataset with the filled-in missing values for this part.
+    * For this part the `weekdays()` function may be of some help here. Use the dataset with the filled-in missing values for this part.
+    * Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+    * Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
-Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
-
+As we see below, there is a spike in the morning time during the weekdays, on average there are more steps in the weekend.
 
 
 ```r
@@ -307,7 +301,7 @@ qplot(data = df3, x = interval, y= avg_steps2,
     facet_grid(. ~ daytype)
 ```
 
-![](Project1_Davut_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](Project1_Davut_files/figure-html/line2-1.png)<!-- -->
 
 
 
